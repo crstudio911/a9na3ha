@@ -6,6 +6,8 @@
 <meta name="description" content="صفحة اختبار الإعلانات">
 <title>صفحة اختبار الإعلانات</title>
 <script src="https://pl31073272.profitableratecpmnetwork.com/ec/48/ff/ec48ff13c7a0fd25fe653bd8bf0ba4a6.js"></script>
+<script src="https://pl31073321.profitableratecpmnetwork.com/b5/7e/70/b57e708efb671eea0bd011c107f1818c.js"></script>
+<script async="async" data-cfasync="false" src="https://pl31073322.profitableratecpmnetwork.com/7cb3b06b6356f4e9a614bae1f13d4081/invoke.js"></script>
 
 <style>
 *{
@@ -111,6 +113,14 @@ p{
     background:#244bea;
 }
 
+.ads-section{
+    margin:25px 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+}
+
 .status{
     margin-top:30px;
     padding:15px;
@@ -136,7 +146,7 @@ p{
     <h1>صفحة اختبار الإعلانات</h1>
 
     <p>
-        اضغط على الزر لفتح صفحة الإعلان.
+        اضغط على الزر لفتح صفحة الإعلان وحصد المكافأة.
     </p>
 
     <div class="coins">
@@ -150,6 +160,43 @@ p{
         شاهد الإعلان
     </button>
 
+    <div class="ads-section">
+        <div id="container-7cb3b06b6356f4e9a614bae1f13d4081"></div>
+
+        <script>
+          atOptions = {
+            'key' : '5c0845cb657b8b8f3d7a33c1d9c8769b',
+            'format' : 'iframe',
+            'height' : 60,
+            'width' : 468,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highrevenueformat.com/5c0845cb657b8b8f3d7a33c1d9c8769b/invoke.js"></script>
+
+        <script>
+          atOptions = {
+            'key' : '25d859d9bc9fdd13dc480ec1fdb29ac3',
+            'format' : 'iframe',
+            'height' : 300,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highrevenueformat.com/25d859d9bc9fdd13dc480ec1fdb29ac3/invoke.js"></script>
+
+        <script>
+          atOptions = {
+            'key' : '21e43bed4f9b1d5132b5ec14c1cfb07b',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highrevenueformat.com/21e43bed4f9b1d5132b5ec14c1cfb07b/invoke.js"></script>
+    </div>
+
     <div class="status">
         الصفحة تعمل بشكل طبيعي — وقت الزيارة:
         <span id="time"></span>
@@ -158,6 +205,8 @@ p{
 </div>
 
 <script>
+const adLink = "https://www.profitableratecpmnetwork.com/q3vstrfms?key=139074a7effc36ae4808735fb0ba5a94";
+
 let coins = Number(localStorage.getItem("coins")) || 0;
 
 function updateCoins(){
@@ -165,6 +214,13 @@ function updateCoins(){
 }
 
 function openAd(){
+    if(!adLink || !adLink.startsWith("http")){
+        alert("لم يتم إضافة رابط الإعلان.");
+        return;
+    }
+
+    window.open(adLink, "_blank");
+
     coins += 5;
     localStorage.setItem("coins", coins);
     updateCoins();
