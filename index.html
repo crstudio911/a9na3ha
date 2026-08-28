@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="صفحة اختبار الإعلانات">
 <title>صفحة اختبار الإعلانات</title>
+<script src="https://pl31073272.profitableratecpmnetwork.com/ec/48/ff/ec48ff13c7a0fd25fe653bd8bf0ba4a6.js"></script>
 
 <style>
 *{
@@ -157,9 +158,6 @@ p{
 </div>
 
 <script>
-
-const adLink = "https://omg10.com/4/11676811";
-
 let coins = Number(localStorage.getItem("coins")) || 0;
 
 function updateCoins(){
@@ -167,13 +165,9 @@ function updateCoins(){
 }
 
 function openAd(){
-
-    if(!adLink || !adLink.startsWith("http")){
-        alert("لم يتم إضافة رابط الإعلان.");
-        return;
-    }
-
-    window.location.href = adLink;
+    coins += 5;
+    localStorage.setItem("coins", coins);
+    updateCoins();
 }
 
 function updateTime(){
@@ -184,10 +178,8 @@ function updateTime(){
 updateCoins();
 updateTime();
 
-setInterval(updateTime,1000);
-
+setInterval(updateTime, 1000);
 </script>
 
 </body>
 </html>
-
