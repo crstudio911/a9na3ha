@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="صفحة اختبار الإعلانات">
+<title>صفحة اختبار الإعلانات</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    background:#08090b;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:700px;
+    text-align:center;
+    padding:50px 30px;
+    background:#111318;
+    border:1px solid #252832;
+    border-radius:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:30px;
+    background:#191c23;
+    color:#8da2ff;
+    font-size:14px;
+    margin-bottom:22px;
+}
+
+h1{
+    font-size:clamp(30px,6vw,52px);
+    margin-bottom:16px;
+}
+
+p{
+    color:#9da3b0;
+    font-size:17px;
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+.coins{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    width:max-content;
+    max-width:100%;
+    margin:0 auto 25px;
+    padding:12px 20px;
+    border-radius:14px;
+    background:#0b0d11;
+    border:1px solid #252832;
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.coin-icon{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f4c542;
+    color:#111;
+    font-size:14px;
+    font-weight:900;
+}
+
+#coinBalance{
+    color:#f4c542;
+}
+
+.button{
+    display:inline-block;
+    padding:14px 28px;
+    border-radius:10px;
+    background:#315cff;
+    color:#fff;
+    text-decoration:none;
+    font-weight:bold;
+    transition:.25s;
+    cursor:pointer;
+    border:none;
+    font-size:16px;
+}
+
+.button:hover{
+    transform:translateY(-2px);
+    background:#244bea;
+}
+
+.status{
+    margin-top:30px;
+    padding:15px;
+    border-radius:10px;
+    background:#0b0d11;
+    border:1px solid #20232b;
+    color:#737987;
+    font-size:14px;
+}
+
+#time{
+    color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="badge">AD TEST PAGE</div>
+
+    <h1>صفحة اختبار الإعلانات</h1>
+
+    <p>
+        اضغط على الزر لفتح صفحة الإعلان.
+    </p>
+
+    <div class="coins">
+        <span class="coin-icon">C</span>
+        <span>رصيدك:</span>
+        <span id="coinBalance">0</span>
+        <span>عملة</span>
+    </div>
+
+    <button class="button" onclick="openAd()">
+        شاهد الإعلان
+    </button>
+
+    <div class="status">
+        الصفحة تعمل بشكل طبيعي — وقت الزيارة:
+        <span id="time"></span>
+    </div>
+
+</div>
+
+<script>
+
+const adLink = "https://omg10.com/4/11676811";
+
+let coins = Number(localStorage.getItem("coins")) || 0;
+
+function updateCoins(){
+    document.getElementById("coinBalance").textContent = coins;
+}
+
+function openAd(){
+
+    if(!adLink || !adLink.startsWith("http")){
+        alert("لم يتم إضافة رابط الإعلان.");
+        return;
+    }
+
+    window.location.href = adLink;
+}
+
+function updateTime(){
+    document.getElementById("time").textContent =
+        new Date().toLocaleTimeString("ar-EG");
+}
+
+updateCoins();
+updateTime();
+
+setInterval(updateTime,1000);
+
+</script>
+
+</body>
+</html>
+
