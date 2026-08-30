@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أصنــعها | الرئيسية</title>
+<link rel="icon" type="image/png" href="../img/fav.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div id="whatsappModal" class="modal-overlay hidden">
+  <div class="modal-box wa-modal-box">
+    <button class="modal-close" id="waModalClose">&times;</button>
+    <h2 class="wa-modal-title">قنوات الواتساب</h2>
+    <div id="waChannelsList" class="wa-channels-list"></div>
+  </div>
+</div>
+
+<div id="sessionLoader" class="session-loader">
+  <div class="loader-ring"></div>
+  <p>جاري التحقق من الجلسة...</p>
+</div>
+
+<div id="closedScreen" class="closed-screen hidden">
+  <div class="closed-card">
+    <p id="closedMessage"></p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+
+  <header class="topbar">
+    <div class="left-cluster">
+      <button class="icon-btn logout-btn" id="logoutBtn" title="تسجيل الخروج">
+        <svg viewBox="0 0 24 24"><path d="M16 17l5-5-5-5M21 12H9M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7"/></svg>
+      </button>
+
+      <button class="whatsapp-expand-btn" id="whatsappBtn">
+        <span class="wa-glow"></span>
+        <span class="wa-inner">
+          <img class="wa-icon" src="../img/wa.png" alt="">
+          <span class="wa-text">انضم لقناة الواتساب الآن</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="brand-block">
+      <img src="../img/logo.png" alt="أصنعها" class="brand-logo">
+      <span class="brand-name">أصنــعها</span>
+    </div>
+
+    <div class="topbar-cluster">
+      <a href="../more/sup.html" class="icon-btn support-btn" title="الدعم الفني">
+        <svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><path d="M2 16a2 2 0 0 1 2-2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a2 2 0 0 1-2-2v-2Z"/><path d="M22 16a2 2 0 0 0-2-2h-1a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1a2 2 0 0 0 2-2v-2Z"/><path d="M18 19a6 6 0 0 1-6 3"/></svg>
+      </a>
+
+      <div class="user-chip" id="userChip">
+        <span class="avatar-ring" id="avatarRing">
+          <img id="userAvatar" src="../img/pro1.png" alt="">
+        </span>
+        <div class="user-meta">
+          <span class="user-name-row">
+            <span id="userName" class="user-name">--</span>
+            <img id="ownBadge" class="own-badge-inline hidden" src="../img/abro.png" alt="">
+          </span>
+          <span id="userBadge" class="user-badge hidden"></span>
+        </div>
+      </div>
+
+      <a href="../more/pro.html" class="icon-btn pro-btn" title="الترقية">
+        <svg viewBox="0 0 24 24"><path d="M5 19h14M5 19l-1-9 5 3 3-6 3 6 5-3-1 9"/></svg>
+      </a>
+
+      <div class="cash-chip">
+        <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v2M3 7v10a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H8m0 0h13"/><circle cx="16.5" cy="12.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        <span id="userCash">0</span>
+        <span class="cash-unit">ج.م</span>
+      </div>
+
+      <a href="../more/don.html" class="donate-btn" title="Donate">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.5 8.5 3 5 6.5 5c2 0 3.5 1.2 4.5 2.6C12 6.2 13.5 5 15.5 5 19 5 21.5 8.5 19.5 12.5 17 16.65 12 21 12 21Z"/></svg>
+        <span>Donate</span>
+      </a>
+    </div>
+  </header>
+
+  <div id="storageBanner" class="storage-banner hidden">
+    <span>التخزين مش شغال دلوقتي، مينفعش تنشئ مشروع جديد غير لما يشتغل</span>
+    <button id="bannerReconnectBtn">إعادة الاتصال</button>
+  </div>
+
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="overview">نظرة عامة</button>
+    <button class="tab-btn" data-tab="posts">المنشورات</button>
+    <button class="tab-btn" data-tab="storage">التخزين</button>
+  </nav>
+
+  <div id="infoMessageBanner" class="info-message-banner hidden">
+    <svg viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+      <circle cx="12" cy="7.7" r="1.35" fill="currentColor" stroke="none"/>
+      <rect x="10.85" y="10.8" width="2.3" height="7" rx="1.15" fill="currentColor" stroke="none"/>
+    </svg>
+    <p id="infoMessageText"></p>
+  </div>
+
+  <main class="content">
+
+    <section class="tab-panel active" id="tab-overview">
+      <div class="grid-overview">
+
+        <div class="card wide-card">
+          <h2>نظرة عامة على حسابك</h2>
+          <div class="overview-grid">
+            <div class="overview-item">
+              <span class="ov-label">الاسم</span>
+              <span class="ov-value" id="ovName">--</span>
+            </div>
+            <div class="overview-item">
+              <span class="ov-label">البريد الإلكتروني</span>
+              <span class="ov-value" id="ovEmail">--</span>
+            </div>
+            <div class="overview-item">
+              <span class="ov-label">الخطة الحالية</span>
+              <span class="ov-value" id="ovRule">--</span>
+            </div>
+            <div class="overview-item">
+              <span class="ov-label">الرصيد</span>
+              <span class="ov-value" id="ovCash">--</span>
+            </div>
+            <div class="overview-item">
+              <span class="ov-label">تاريخ الانضمام</span>
+              <span class="ov-value" id="ovJoin">--</span>
+            </div>
+            <div class="overview-item">
+              <span class="ov-label">آخر ظهور</span>
+              <span class="ov-value" id="ovLastUse">--</span>
+            </div>
+          </div>
+        </div>
+
+        <a href="../work/work.html" class="card action-card" id="newProjectCard">
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+          <div>
+            <h3>إنشاء مشروع جديد</h3>
+            <p>ابدأ مشروعك الآن وابنِ فكرتك خطوة بخطوة</p>
+            <p class="storage-note">لازم تتأكد إن التخزين شغال من تاب "التخزين" الأول</p>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-posts">
+      <div class="composer card">
+        <div class="composer-top">
+          <img id="composerAvatar" class="composer-avatar" src="../img/pro1.png" alt="">
+          <textarea id="postCaption" maxlength="300" placeholder="اكتب حاجة عايز تشاركها..."></textarea>
+        </div>
+        <div class="composer-bottom">
+          <label class="attach-btn">
+            <svg viewBox="0 0 24 24"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10m6-9-4.5 4.5L14 12l-6 6"/></svg>
+            <span id="attachLabel">إضافة صورة</span>
+            <input type="file" id="postImageInput" accept="image/*" hidden>
+          </label>
+          <button class="btn-primary" id="publishBtn">نشر</button>
+        </div>
+        <p id="composerMessage" class="composer-message"></p>
+      </div>
+
+      <div id="postsFeed" class="posts-feed"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-storage">
+      <div class="card storage-card">
+        <div class="storage-status">
+          <span id="storageDot" class="storage-dot"></span>
+          <span id="storageStatusText">جاري الفحص...</span>
+        </div>
+
+        <p class="storage-hint">
+          التخزين كله على جهازك بس، أنشئ فولدر أو مجلد جديد واختاره فقط.
+        </p>
+
+        <div class="storage-actions">
+          <button class="btn-primary" id="connectStorageBtn">اختيار مجلد التخزين</button>
+          <button class="btn-secondary hidden" id="clearStorageBtn">مسح كل البيانات</button>
+        </div>
+
+        <p id="storageUnsupported" class="storage-warning hidden">
+          المتصفح ده مش بيدعم ميزة التخزين المحلي. استخدم Chrome أو Edge على الكمبيوتر.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

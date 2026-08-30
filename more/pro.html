@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أصنــعها | الترقية</title>
+<link rel="icon" type="image/png" href="../img/fav.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="pro.css">
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<a href="../main/main.html" class="top-back-btn">
+  <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+  <span>رجوع للرئيسية</span>
+</a>
+
+<div id="sessionLoader" class="session-loader">
+  <div class="loader-ring"></div>
+  <p>جاري التحقق من الجلسة...</p>
+</div>
+
+<div id="closedScreen" class="closed-screen hidden">
+  <div class="closed-card">
+    <p id="closedMessage"></p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+
+  <section class="view active" id="view-plans">
+    <div class="view-head">
+      <span class="view-eyebrow">اشتراك شهري فقط</span>
+      <h1>رقّي تجربتك على أصنــعها</h1>
+      <p>اختار الباقة اللي تناسبك، كل الباقات لمدة شهر واحد وتقدر تجددها وقتما تحب</p>
+    </div>
+
+    <div class="balance-bar">
+      <div class="balance-info">
+        <i class="fa-solid fa-wallet"></i>
+        <span>رصيدك الحالي</span>
+        <strong id="balanceValue">-- ج.م</strong>
+      </div>
+      <button class="btn-charge" id="openChargeBtn">
+        <i class="fa-solid fa-plus"></i>
+        اشحن رصيدك
+      </button>
+    </div>
+
+    <div class="plans-grid" id="plansGrid"></div>
+  </section>
+
+  <section class="view" id="view-charge-amount">
+    <div class="charge-card">
+      <h2>اشحن رصيدك</h2>
+      <p class="charge-sub">حدد المبلغ اللي عايز تشحنه، وهيتضاف لرصيدك بعد ما نتحقق من التحويل</p>
+
+      <div class="amount-chips" id="amountChips">
+        <button type="button" class="chip" data-amount="250">250 ج.م</button>
+        <button type="button" class="chip" data-amount="400">400 ج.م</button>
+        <button type="button" class="chip" data-amount="1000">1000 ج.م</button>
+      </div>
+
+      <label class="amount-label" for="customAmount">أو أدخل مبلغ آخر</label>
+      <input type="number" id="customAmount" class="amount-input" min="10" max="20000" step="1" placeholder="مثال: 300">
+
+      <p class="amount-error hidden" id="amountError">أدخل مبلغ صحيح لا يقل عن 10 ج.م</p>
+
+      <div class="transfer-actions">
+        <button class="btn-ghost" id="backToPlansFromAmountBtn">رجوع</button>
+        <button class="btn-primary" id="continueChargeBtn">متابعة</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-charge-transfer">
+    <div class="transfer-card">
+      <h2>خطوات التحويل عبر InstaPay</h2>
+
+      <ol class="steps-list">
+        <li><span class="step-num">1</span><span>افتح تطبيق InstaPay</span></li>
+        <li><span class="step-num">2</span><span>اختار "إرسال نقود"</span></li>
+        <li><span class="step-num">3</span><span>اختار "بطاقة إلكترونية"</span></li>
+        <li><span class="step-num">4</span><span>ادخل رقم البطاقة واسم صاحبها الموضحين تحت</span></li>
+      </ol>
+
+      <div class="transfer-details">
+        <div class="detail-row">
+          <span class="detail-label"><i class="fa-solid fa-credit-card"></i>رقم البطاقة</span>
+          <span class="detail-value">5484460694134354</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="fa-solid fa-user"></i>اسم صاحب البطاقة</span>
+          <span class="detail-value">Mahmoud Abdelmajed</span>
+        </div>
+      </div>
+
+      <div class="transfer-summary" id="transferSummary"></div>
+
+      <p class="transfer-note">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        بعد إتمام التحويل، احتفظ بسكرين شوت التحويل، هتحتاجه في الخطوة الجاية
+      </p>
+
+      <p class="transfer-thanks">شكرًا لثقتكم في أصنــعها</p>
+
+      <div class="transfer-actions">
+        <button class="btn-ghost" id="backToAmountBtn">رجوع</button>
+        <button class="btn-primary" id="confirmTransferBtn">تم التحويل، استخراج الفاتورة</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-charge-invoice">
+    <div class="invoice-wrap">
+
+      <div class="invoice-card" id="chargeInvoiceCard">
+        <div class="invoice-header">
+          <img src="../img/logo.png" class="invoice-logo" alt="أصنعها">
+          <div class="invoice-title">
+            <h2>فاتورة شحن رصيد</h2>
+            <span class="invoice-date" id="chargeInvDate">--</span>
+          </div>
+        </div>
+
+        <div class="invoice-customer">
+          <img id="chargeInvAvatar" class="invoice-avatar" src="../img/pro1.png" alt="">
+          <div class="invoice-customer-meta">
+            <span class="invoice-customer-name" id="chargeInvName">--</span>
+            <span class="invoice-customer-id">ID: <span id="chargeInvId">--</span></span>
+          </div>
+        </div>
+
+        <div class="invoice-line">
+          <span class="invoice-line-label">نوع العملية</span>
+          <span class="invoice-line-value">شحن رصيد</span>
+        </div>
+
+        <div class="invoice-line invoice-total-line">
+          <span class="invoice-line-label">المبلغ</span>
+          <span class="invoice-line-value invoice-total-value" id="chargeInvTotal">--</span>
+        </div>
+
+        <p class="invoice-policy">
+          سيتم إضافة هذا المبلغ إلى رصيدك بعد التحقق من التحويل، احتفظ بإثبات التحويل لحين المراجعة
+        </p>
+      </div>
+
+      <button class="btn-primary" id="downloadChargeInvoiceBtn">
+        <i class="fa-solid fa-download"></i>
+        تحميل الفاتورة
+      </button>
+
+      <div class="whatsapp-box">
+        <p>أرسل هذه الفاتورة مع سكرين شوت التحويل لهذا الرقم عبر واتساب</p>
+        <a class="whatsapp-btn" id="chargeWhatsappBtn" target="_blank" rel="noopener">
+          <i class="fa-brands fa-whatsapp"></i>
+          أرسل الآن
+        </a>
+      </div>
+
+      <button class="btn-ghost" id="backToChargeTransferBtn">رجوع</button>
+    </div>
+  </section>
+
+  <section class="view" id="view-subscribe-result">
+    <div class="invoice-wrap">
+
+      <div class="invoice-card" id="subInvoiceCard">
+        <div class="invoice-header">
+          <img src="../img/logo.png" class="invoice-logo" alt="أصنعها">
+          <div class="invoice-title">
+            <h2>فاتورة اشتراك</h2>
+            <span class="invoice-date" id="subInvDate">--</span>
+          </div>
+        </div>
+
+        <div class="invoice-customer">
+          <img id="subInvAvatar" class="invoice-avatar" src="../img/pro1.png" alt="">
+          <div class="invoice-customer-meta">
+            <span class="invoice-customer-name" id="subInvName">--</span>
+            <span class="invoice-customer-id">ID: <span id="subInvId">--</span></span>
+          </div>
+        </div>
+
+        <div class="invoice-line">
+          <span class="invoice-line-label">الباقة</span>
+          <span class="invoice-line-value" id="subInvPlan">--</span>
+        </div>
+
+        <div class="invoice-line">
+          <span class="invoice-line-label">صالحة حتى</span>
+          <span class="invoice-line-value" id="subInvExpiry">--</span>
+        </div>
+
+        <div class="invoice-line invoice-total-line">
+          <span class="invoice-line-label">المبلغ المخصوم</span>
+          <span class="invoice-line-value invoice-total-value" id="subInvTotal">--</span>
+        </div>
+
+        <p class="invoice-policy">
+          بمجرد تفعيل هذا الاشتراك، لا يمكن استرداد ثمنه تحت أي سبب
+        </p>
+      </div>
+
+      <div class="subscribe-success-note">
+        <i class="fa-solid fa-circle-check"></i>
+        تم تفعيل اشتراكك بنجاح
+      </div>
+
+      <button class="btn-primary" id="downloadSubInvoiceBtn">
+        <i class="fa-solid fa-download"></i>
+        تحميل الفاتورة
+      </button>
+
+      <button class="btn-ghost" id="backToPlansFromSubBtn">رجوع للباقات</button>
+    </div>
+  </section>
+
+</div>
+
+<div class="info-modal hidden" id="insufficientModal">
+  <div class="info-modal-card">
+    <button class="info-modal-close" id="insufficientModalClose">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <h3>رصيدك غير كافٍ</h3>
+    <p id="insufficientText">--</p>
+    <button class="btn-primary insufficient-charge-btn" id="insufficientChargeBtn">
+      <i class="fa-solid fa-plus"></i>
+      اشحن رصيدك الآن
+    </button>
+  </div>
+</div>
+
+<div class="info-modal hidden" id="infoModal">
+  <div class="info-modal-card">
+    <button class="info-modal-close" id="infoModalClose">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <h3 id="infoModalTitle">--</h3>
+    <p id="infoModalText">--</p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="pro.js"></script>
+</body>
+</html>

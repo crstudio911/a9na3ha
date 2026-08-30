@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donate Now</title>
+<link rel="icon" type="image/png" href="../img/fav.png">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:'Cairo',sans-serif;
+    color:#fff;
+    background:
+        radial-gradient(circle at 15% 15%,rgba(76,94,240,.16),transparent 30%),
+        radial-gradient(circle at 85% 25%,rgba(0,200,170,.11),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(120,70,255,.10),transparent 35%),
+        #080a10;
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:45px 45px;
+    mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+.back{
+    position:fixed;
+    top:24px;
+    right:24px;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:10px 17px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:13px;
+    color:#dce2ee;
+    background:rgba(13,16,24,.72);
+    backdrop-filter:blur(15px);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s ease;
+}
+
+.back:hover{
+    transform:translateY(-2px);
+    border-color:rgba(255,255,255,.24);
+    background:rgba(22,26,37,.9);
+}
+
+.back span{
+    font-size:17px;
+    line-height:1;
+}
+
+.page{
+    display:none;
+    min-height:100vh;
+    animation:pageIn .55s ease forwards;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:0;
+        transform:translateY(14px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.container{
+    position:relative;
+    width:min(1050px,92%);
+    margin:auto;
+    padding:88px 0 55px;
+    text-align:center;
+}
+
+.logo{
+    width:185px;
+    max-width:65vw;
+    height:auto;
+    display:block;
+    object-fit:contain;
+    margin:0 auto 27px;
+    filter:drop-shadow(0 15px 35px rgba(0,0,0,.4));
+    animation:logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-7px)}
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    padding:7px 16px;
+    border:1px solid rgba(91,112,255,.25);
+    border-radius:999px;
+    background:rgba(77,94,220,.09);
+    color:#aebaff;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.7px;
+    margin-bottom:20px;
+}
+
+h1{
+    max-width:850px;
+    margin:auto;
+    font-size:clamp(38px,7vw,72px);
+    line-height:1.12;
+    letter-spacing:-2.5px;
+    font-weight:800;
+    background:linear-gradient(135deg,#fff 15%,#dfe5ff 48%,#8c9cff 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.subtitle{
+    max-width:690px;
+    margin:22px auto 0;
+    color:#aeb5c4;
+    font-size:16px;
+    line-height:2;
+}
+
+.support-card{
+    position:relative;
+    max-width:870px;
+    margin:48px auto 0;
+    padding:46px 45px;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:30px;
+    background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    box-shadow:0 30px 90px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.05);
+    backdrop-filter:blur(18px);
+    overflow:hidden;
+}
+
+.support-card:before{
+    content:"";
+    position:absolute;
+    width:270px;
+    height:270px;
+    top:-160px;
+    left:-90px;
+    border-radius:50%;
+    background:rgba(92,112,255,.15);
+    filter:blur(45px);
+}
+
+.support-card:after{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    bottom:-150px;
+    right:-70px;
+    border-radius:50%;
+    background:rgba(0,207,177,.09);
+    filter:blur(45px);
+}
+
+.card-content{
+    position:relative;
+    z-index:2;
+}
+
+.card-title{
+    font-size:27px;
+    font-weight:800;
+    margin-bottom:16px;
+}
+
+.card-text{
+    color:#aeb5c4;
+    line-height:2;
+    font-size:14px;
+    max-width:680px;
+    margin:auto;
+}
+
+.thanks{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:32px 0;
+}
+
+.thank-box{
+    padding:21px 14px;
+    border-radius:18px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.06);
+    transition:.3s ease;
+}
+
+.thank-box:hover{
+    transform:translateY(-5px);
+    background:rgba(255,255,255,.055);
+    border-color:rgba(255,255,255,.12);
+}
+
+.thank-box strong{
+    display:block;
+    font-size:14px;
+    color:#e9ecf5;
+    margin-bottom:7px;
+}
+
+.thank-box span{
+    display:block;
+    color:#858d9d;
+    font-size:11px;
+    line-height:1.7;
+}
+
+.donate-btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:220px;
+    padding:17px 30px;
+    border:0;
+    border-radius:15px;
+    background:linear-gradient(135deg,#6375ff,#4858df);
+    color:#fff;
+    font-family:Arial,sans-serif;
+    text-decoration:none;
+    font-size:15px;
+    font-weight:800;
+    direction:ltr;
+    box-shadow:0 14px 35px rgba(76,91,231,.30);
+    overflow:hidden;
+    cursor:pointer;
+    transition:.3s ease;
+}
+
+.donate-btn:before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:70%;
+    height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+    transform:skewX(-20deg);
+    transition:.6s ease;
+}
+
+.donate-btn:hover{
+    transform:translateY(-4px);
+    box-shadow:0 20px 45px rgba(76,91,231,.40);
+}
+
+.donate-btn:hover:before{
+    left:140%;
+}
+
+.donate-btn span{
+    position:relative;
+    z-index:2;
+}
+
+.bottom-message{
+    margin:38px auto 0;
+    max-width:700px;
+    color:#737b8b;
+    font-size:12px;
+    line-height:2;
+}
+
+.bottom-message b{
+    color:#b8bfcd;
+}
+
+.footer{
+    padding:20px 0 32px;
+    text-align:center;
+    color:#555d6c;
+    font-size:11px;
+}
+
+.payment-wrapper{
+    width:min(760px,92%);
+    margin:auto;
+    padding:84px 0 55px;
+}
+
+.payment-header{
+    text-align:center;
+    margin-bottom:32px;
+}
+
+.payment-header .logo{
+    width:155px;
+    margin-bottom:27px;
+}
+
+.tag{
+    display:inline-block;
+    padding:7px 15px;
+    border:1px solid rgba(93,111,255,.22);
+    border-radius:999px;
+    background:rgba(82,98,226,.08);
+    color:#aeb9ff;
+    font-size:10px;
+    font-weight:800;
+    margin-bottom:16px;
+}
+
+.payment-header h1{
+    font-size:clamp(32px,6vw,50px);
+    letter-spacing:-1.5px;
+}
+
+.payment-header p{
+    color:#929aaa;
+    font-size:13px;
+    line-height:2;
+    margin:15px auto 0;
+    max-width:600px;
+}
+
+.payment-card{
+    position:relative;
+    padding:38px;
+    border-radius:28px;
+    border:1px solid rgba(255,255,255,.09);
+    background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    box-shadow:0 30px 80px rgba(0,0,0,.4);
+    backdrop-filter:blur(18px);
+    overflow:hidden;
+}
+
+.payment-card:before{
+    content:"";
+    position:absolute;
+    width:240px;
+    height:240px;
+    left:-120px;
+    top:-120px;
+    border-radius:50%;
+    background:rgba(76,94,240,.13);
+    filter:blur(35px);
+}
+
+.section{
+    position:relative;
+    z-index:2;
+}
+
+.method{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:19px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:18px;
+    background:rgba(255,255,255,.025);
+    margin-bottom:29px;
+}
+
+.method-icon{
+    width:44px;
+    height:44px;
+    flex:0 0 44px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(95,111,255,.13);
+    border:1px solid rgba(95,111,255,.18);
+    color:#aeb8ff;
+    font-size:12px;
+    font-weight:800;
+    direction:ltr;
+}
+
+.method strong{
+    display:block;
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.method span{
+    color:#858d9d;
+    font-size:11px;
+}
+
+h2{
+    font-size:18px;
+    margin-bottom:18px;
+}
+
+.steps{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+    margin-bottom:28px;
+}
+
+.step{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    padding:16px;
+    border-radius:16px;
+    background:rgba(255,255,255,.025);
+    border:1px solid rgba(255,255,255,.055);
+}
+
+.number{
+    flex:0 0 30px;
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:rgba(96,112,255,.13);
+    border:1px solid rgba(96,112,255,.18);
+    color:#aeb8ff;
+    font-size:10px;
+    font-weight:800;
+    direction:ltr;
+}
+
+.step p{
+    color:#c0c6d2;
+    font-size:12px;
+    line-height:1.8;
+    padding-top:4px;
+}
+
+.info{
+    display:grid;
+    gap:11px;
+}
+
+.info-box{
+    padding:18px;
+    border-radius:17px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.065);
+}
+
+.info-label{
+    display:block;
+    color:#727b8b;
+    font-size:10px;
+    margin-bottom:9px;
+}
+
+.info-value{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    color:#f1f3f8;
+    font-size:14px;
+    font-weight:700;
+    direction:ltr;
+}
+
+.copy{
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.045);
+    color:#aeb6c5;
+    border-radius:9px;
+    padding:7px 11px;
+    cursor:pointer;
+    font-size:10px;
+    transition:.25s;
+}
+
+.copy:hover{
+    background:rgba(255,255,255,.08);
+    color:#fff;
+}
+
+.note{
+    margin-top:23px;
+    padding:19px;
+    border-radius:17px;
+    background:rgba(76,94,240,.055);
+    border:1px solid rgba(91,109,255,.12);
+    color:#929aaa;
+    font-size:11px;
+    line-height:2;
+    text-align:center;
+}
+
+.thank-you{
+    text-align:center;
+    margin-top:32px;
+    padding-top:27px;
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.thank-you h3{
+    font-size:23px;
+    margin-bottom:10px;
+}
+
+.thank-you p{
+    color:#858d9d;
+    font-size:12px;
+    line-height:2;
+    max-width:570px;
+    margin:auto;
+}
+
+@media(max-width:700px){
+    .back{
+        top:13px;
+        right:13px;
+        padding:9px 13px;
+        font-size:11px;
+    }
+
+    .container{
+        padding:76px 0 42px;
+    }
+
+    .logo{
+        width:150px;
+        margin-bottom:23px;
+    }
+
+    h1{
+        letter-spacing:-1.3px;
+    }
+
+    .subtitle{
+        font-size:13px;
+        line-height:2;
+        padding:0 6px;
+    }
+
+    .support-card{
+        margin-top:34px;
+        padding:32px 19px;
+        border-radius:24px;
+    }
+
+    .card-title{
+        font-size:22px;
+    }
+
+    .card-text{
+        font-size:12px;
+    }
+
+    .thanks{
+        grid-template-columns:1fr;
+        gap:9px;
+        margin:26px 0;
+    }
+
+    .thank-box{
+        padding:17px 13px;
+    }
+
+    .donate-btn{
+        width:100%;
+    }
+
+    .payment-wrapper{
+        padding:74px 0 40px;
+    }
+
+    .payment-header .logo{
+        width:130px;
+    }
+
+    .payment-card{
+        padding:21px 16px;
+        border-radius:23px;
+    }
+
+    .method{
+        padding:15px;
+    }
+
+    .step{
+        padding:14px;
+    }
+
+    .step p{
+        font-size:11px;
+    }
+
+    .info-value{
+        font-size:12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<a class="back" id="backButton" href="../main/main.html">
+    <span>←</span>
+    رجوع
+</a>
+
+<section class="page active" id="donationPage">
+
+    <main class="container">
+
+        <img class="logo" src="../img/logo.png" alt="الشعار">
+
+        <div class="badge">رحلتنا مستمرة بدعمكم</div>
+
+        <h1>دعمكم هو سر الاستمرار</h1>
+
+        <p class="subtitle">
+            كل دعم منكم يعني لنا الكثير.
+            بفضلكم نستطيع الاستمرار في البناء والتطوير وصناعة المزيد من الأشياء التي نفخر بها.
+            شكرًا لأنكم تؤمنون بما نقدمه وتمنحوننا سببًا جديدًا للاستمرار.
+        </p>
+
+        <section class="support-card">
+
+            <div class="card-content">
+
+                <h2 class="card-title">أنتم جزء أساسي من رحلتنا</h2>
+
+                <p class="card-text">
+                    ما نقدمه اليوم لم يكن ليصل إلى هنا دون الأشخاص الذين اختاروا دعمنا.
+                    مساهمتكم تمنحنا الدافع لنستمر، ونطور أعمالنا، ونحول الأفكار إلى واقع.
+                    مهما كانت قيمة الدعم، فهو محل تقدير كبير بالنسبة لنا ويصنع فرقًا حقيقيًا.
+                </p>
+
+                <div class="thanks">
+
+                    <div class="thank-box">
+                        <strong>شكرًا لثقتكم</strong>
+                        <span>ثقتكم بنا تعني لنا الكثير.</span>
+                    </div>
+
+                    <div class="thank-box">
+                        <strong>شكرًا لدعمكم</strong>
+                        <span>دعمكم يساعدنا على الاستمرار والتطور.</span>
+                    </div>
+
+                    <div class="thank-box">
+                        <strong>شكرًا لوجودكم</strong>
+                        <span>وجودكم جزء مهم من رحلتنا.</span>
+                    </div>
+
+                </div>
+
+                <button class="donate-btn" id="donateButton">
+                    <span>Donate Now</span>
+                </button>
+
+                <p class="bottom-message">
+                    نحن نقدر بكل صدق كل شخص يقرر أن يدعمنا.
+                    <b>كلماتكم وثقتكم ودعمكم تمنحنا الدافع لنكمل الطريق.</b>
+                    شكرًا من القلب لكل من كان جزءًا من هذه الرحلة.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+       جميع الحقوق محفوظه لدي MC 
+    </footer>
+
+</section>
+
+<section class="page" id="paymentPage">
+
+    <main class="payment-wrapper">
+
+        <header class="payment-header">
+
+            <img class="logo" src="../img/logo.png" alt="الشعار">
+
+            <div class="tag">أكـــمل</div>
+
+            <h1>اتبع الخطوات</h1>
+
+            <p>
+                نحن ممتنون جدًا لقراركم بدعم رحلتنا.
+                مساهمتكم تمنحنا الطاقة والدافع للاستمرار وتقديم الأفضل دائمًا.
+            </p>
+
+        </header>
+
+        <section class="payment-card">
+
+            <div class="section">
+
+                <div class="method">
+
+                    <div class="method-icon">PAY</div>
+
+                    <div>
+                        <strong>التحويل عبر إنستا باي فقط</strong>
+                        <span>يرجى استخدام تطبيق إنستا باي لإتمام العملية.</span>
+                    </div>
+
+                </div>
+
+                <h2>خطوات التحويل</h2>
+
+                <div class="steps">
+
+                    <div class="step">
+                        <div class="number">01</div>
+                        <p>افتح تطبيق إنستا باي على هاتفك.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="number">02</div>
+                        <p>اختر <strong>إرسال نقود</strong>.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="number">03</div>
+                        <p>اختر <strong>بطاقة إلكترونية</strong> كطريقة للتحويل.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="number">04</div>
+                        <p>أدخل رقم البطاقة ثم اسم صاحب البطاقة الموضح بالأسفل.</p>
+                    </div>
+
+                </div>
+
+                <div class="info">
+
+                    <div class="info-box">
+                        <span class="info-label">رقم البطاقة</span>
+
+                        <div class="info-value">
+                            <span id="cardNumber">5484460694134354</span>
+                            <button class="copy" onclick="copyText('cardNumber',this)">نسخ</button>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">اسم صاحب البطاقة</span>
+
+                        <div class="info-value">
+                            <span id="ownerName">Mahmoud Abdelmajed</span>
+                            <button class="copy" onclick="copyText('ownerName',this)">نسخ</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="note">
+                    يرجى التأكد من إدخال البيانات بشكل صحيح قبل تأكيد عملية التحويل.
+                    نشكركم بصدق على الوقت والجهد الذي بذلتموه لدعمنا.
+                </div>
+
+                <div class="thank-you">
+
+                    <h3>شكرًا لكم من القلب</h3>
+
+                    <p>
+                        دعمكم ليس مجرد تبرع، بل هو تشجيع ودافع وسبب إضافي يجعلنا نستمر.
+                        نحن نقدر ثقتكم وكرمكم بشكل لا يمكن وصفه بالكلمات.
+                        كل مساهمة لها قيمة، وكل شخص يدعمنا يترك أثرًا حقيقيًا في رحلتنا.
+                        شكرًا لأنكم اخترتم أن تكونوا جزءًا منها.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+       جميع الحقوق محفوظه لدي MC
+    </footer>
+
+</section>
+
+<script>
+const donationPage = document.getElementById('donationPage');
+const paymentPage = document.getElementById('paymentPage');
+const donateButton = document.getElementById('donateButton');
+const backButton = document.getElementById('backButton');
+
+function showPayment(){
+    donationPage.classList.remove('active');
+    paymentPage.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+donateButton.addEventListener('click',showPayment);
+
+backButton.addEventListener('click',function(e){
+    if(paymentPage.classList.contains('active')){
+        e.preventDefault();
+        paymentPage.classList.remove('active');
+        donationPage.classList.add('active');
+        window.scrollTo({top:0,behavior:'smooth'});
+    }
+});
+
+function copyText(id,button){
+    const text=document.getElementById(id).textContent;
+
+    navigator.clipboard.writeText(text).then(function(){
+        const oldText=button.textContent;
+        button.textContent='تم النسخ';
+
+        setTimeout(function(){
+            button.textContent=oldText;
+        },1400);
+    });
+}
+</script>
+
+</body>
+</html>
+

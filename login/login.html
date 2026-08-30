@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أصنــعها | تسجيل الدخول</title>
+<link rel="icon" type="image/png" href="../img/fav.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="grid-overlay"></div>
+
+<div class="page">
+
+  <section class="showcase">
+    <div class="showcase-inner">
+      <div class="brand">
+        <img src="../img/logo.png" alt="أصنعها" class="brand-logo">
+        <span class="brand-name">أصنــعها</span>
+      </div>
+      <div id="phraseStage" class="phrase-stage" aria-live="polite"></div>
+      <div class="showcase-footer">
+        <span class="dot"></span>
+        <span>منصة تعليمية تُبنى بعقلك</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="auth">
+    <div class="auth-card">
+
+      <div class="auth-head">
+        <img src="../img/logo.png" alt="أصنعها" class="auth-logo">
+        <h1>أصنــعها</h1>
+        <p class="auth-sub">ابنِ مستقبلك خطوة بخطوة</p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="login" type="button">تسجيل الدخول</button>
+        <button class="tab" data-tab="register" type="button">إنشاء حساب</button>
+        <span class="tab-glider"></span>
+      </div>
+
+      <form id="formLogin" class="auth-form active" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="loginId">الاسم أو البريد الإلكتروني</label>
+          <input id="loginId" name="loginId" type="text" placeholder="اكتب اسمك أو بريدك" required>
+        </div>
+        <div class="field">
+          <label for="loginPass">كلمة المرور</label>
+          <div class="pass-wrap">
+            <input id="loginPass" name="loginPass" type="password" placeholder="••••••••" required>
+            <button type="button" class="pass-toggle" data-target="loginPass">إظهار</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" id="loginSubmit">
+          <span class="btn-label">دخول</span>
+          <span class="btn-loader"></span>
+        </button>
+      </form>
+
+      <form id="formRegister" class="auth-form" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="regName">الاسم بالكامل</label>
+          <input id="regName" name="regName" type="text" placeholder="أســمك" required minlength="3">
+        </div>
+        <div class="field">
+          <label for="regEmail">البريد الإلكتروني <span class="optional">(اختياري)</span></label>
+          <input id="regEmail" name="regEmail" type="email" placeholder="example@mail.com">
+        </div>
+        <div class="field">
+          <label for="regPass">كلمة المرور</label>
+          <div class="pass-wrap">
+            <input id="regPass" name="regPass" type="password" placeholder="8 أحرف على الأقل" required minlength="8">
+            <button type="button" class="pass-toggle" data-target="regPass">إظهار</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="regPass2">تأكيد كلمة المرور</label>
+          <div class="pass-wrap">
+            <input id="regPass2" name="regPass2" type="password" placeholder="أعد كتابة كلمة المرور" required minlength="8">
+            <button type="button" class="pass-toggle" data-target="regPass2">إظهار</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>الصورة الشخصية</label>
+          <div class="avatar-picker">
+            <label class="avatar-option">
+              <input type="radio" name="avatarChoice" value="pro1" checked>
+              <img src="../img/pro1.png" alt="صورة افتراضية 1">
+            </label>
+            <label class="avatar-option">
+              <input type="radio" name="avatarChoice" value="pro2">
+              <img src="../img/pro2.png" alt="صورة افتراضية 2">
+            </label>
+            <label class="avatar-option avatar-upload">
+              <input type="radio" name="avatarChoice" value="upload">
+              <img id="uploadPreview" src="../img/pro1.png" alt="رفع صورة">
+              <span class="upload-plus">+</span>
+            </label>
+            <input type="file" id="avatarFile" accept="image/*" hidden>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" id="registerSubmit">
+          <span class="btn-label">إنشاء الحساب</span>
+          <span class="btn-loader"></span>
+        </button>
+      </form>
+
+      <p id="formMessage" class="form-message"></p>
+
+    </div>
+  </section>
+
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>

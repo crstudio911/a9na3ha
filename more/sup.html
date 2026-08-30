@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز المساعدة</title>
+<link rel="icon" type="image/png" href="../img/fav.png">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:'Cairo',sans-serif;
+    color:#fff;
+    background:
+        radial-gradient(circle at 12% 12%,rgba(72,91,235,.16),transparent 29%),
+        radial-gradient(circle at 88% 28%,rgba(0,200,170,.10),transparent 28%),
+        radial-gradient(circle at 50% 100%,rgba(110,70,255,.09),transparent 35%),
+        #080a10;
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        linear-gradient(rgba(255,255,255,.017) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.017) 1px,transparent 1px);
+    background-size:46px 46px;
+    mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+body:after{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    top:25%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:rgba(75,91,240,.035);
+    filter:blur(100px);
+    pointer-events:none;
+}
+
+.back{
+    position:fixed;
+    top:24px;
+    right:24px;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:10px 17px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:13px;
+    color:#dce2ee;
+    background:rgba(13,16,24,.72);
+    backdrop-filter:blur(15px);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    transition:.3s ease;
+}
+
+.back:hover{
+    transform:translateY(-2px);
+    background:rgba(22,26,37,.92);
+    border-color:rgba(255,255,255,.22);
+}
+
+.back span{
+    font-size:17px;
+    line-height:1;
+}
+
+.wrapper{
+    position:relative;
+    z-index:2;
+    width:min(920px,92%);
+    margin:auto;
+    padding:78px 0 55px;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:38px;
+}
+
+.logo{
+    width:180px;
+    max-width:60vw;
+    height:auto;
+    display:block;
+    object-fit:contain;
+    margin:0 auto 28px;
+    filter:drop-shadow(0 16px 34px rgba(0,0,0,.42));
+    animation:logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-7px);
+    }
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:7px 16px;
+    margin-bottom:18px;
+    border-radius:999px;
+    border:1px solid rgba(95,113,255,.22);
+    background:rgba(78,96,229,.08);
+    color:#aeb9ff;
+    font-size:11px;
+    font-weight:800;
+}
+
+h1{
+    font-size:clamp(34px,6vw,57px);
+    line-height:1.15;
+    letter-spacing:-1.8px;
+    font-weight:800;
+    background:linear-gradient(135deg,#fff 10%,#e0e5ff 48%,#8f9eff 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.header-text{
+    max-width:650px;
+    margin:17px auto 0;
+    color:#969eae;
+    font-size:14px;
+    line-height:2;
+}
+
+.support-layout{
+    display:grid;
+    grid-template-columns:.75fr 1.65fr;
+    gap:18px;
+    align-items:stretch;
+}
+
+.info-card,
+.form-card{
+    position:relative;
+    border:1px solid rgba(255,255,255,.085);
+    background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    box-shadow:0 30px 80px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.04);
+    backdrop-filter:blur(18px);
+    overflow:hidden;
+}
+
+.info-card{
+    border-radius:26px;
+    padding:28px 24px;
+}
+
+.form-card{
+    border-radius:26px;
+    padding:30px;
+}
+
+.info-card:before,
+.form-card:before{
+    content:"";
+    position:absolute;
+    width:210px;
+    height:210px;
+    border-radius:50%;
+    background:rgba(80,98,242,.09);
+    filter:blur(40px);
+    pointer-events:none;
+}
+
+.info-card:before{
+    top:-120px;
+    right:-100px;
+}
+
+.form-card:before{
+    bottom:-130px;
+    left:-100px;
+}
+
+.card-inner{
+    position:relative;
+    z-index:2;
+}
+
+.info-title{
+    font-size:19px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.info-description{
+    color:#858e9f;
+    font-size:12px;
+    line-height:1.9;
+    margin-bottom:24px;
+}
+
+.info-items{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.info-item{
+    padding:15px;
+    border-radius:15px;
+    border:1px solid rgba(255,255,255,.055);
+    background:rgba(255,255,255,.025);
+    transition:.3s ease;
+}
+
+.info-item:hover{
+    transform:translateX(-4px);
+    background:rgba(255,255,255,.045);
+    border-color:rgba(255,255,255,.10);
+}
+
+.info-item strong{
+    display:block;
+    color:#dfe3ec;
+    font-size:12px;
+    margin-bottom:5px;
+}
+
+.info-item span{
+    display:block;
+    color:#707989;
+    font-size:10px;
+    line-height:1.7;
+}
+
+.form-title{
+    font-size:21px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.form-description{
+    color:#7f8899;
+    font-size:11px;
+    line-height:1.8;
+    margin-bottom:23px;
+}
+
+.message-label{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:9px;
+}
+
+.message-label label{
+    color:#cbd0da;
+    font-size:12px;
+    font-weight:700;
+}
+
+.counter{
+    color:#656e7e;
+    font-size:10px;
+}
+
+textarea{
+    display:block;
+    width:100%;
+    min-height:270px;
+    resize:vertical;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:18px;
+    outline:none;
+    background:rgba(5,7,12,.52);
+    color:#eef1f7;
+    padding:19px;
+    font-family:'Cairo',sans-serif;
+    font-size:13px;
+    line-height:2;
+    transition:.3s ease;
+}
+
+textarea::placeholder{
+    color:#555e6d;
+}
+
+textarea:focus{
+    border-color:rgba(101,119,255,.45);
+    background:rgba(5,7,12,.68);
+    box-shadow:0 0 0 4px rgba(82,99,232,.07);
+}
+
+.actions{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    margin-top:15px;
+}
+
+.send-btn{
+    position:relative;
+    flex:1;
+    min-height:52px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#6375ff,#4858df);
+    color:#fff;
+    font-family:'Cairo',sans-serif;
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+    overflow:hidden;
+    box-shadow:0 13px 30px rgba(73,89,224,.25);
+    transition:.3s ease;
+}
+
+.send-btn:before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:65%;
+    height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.23),transparent);
+    transform:skewX(-20deg);
+    transition:.6s ease;
+}
+
+.send-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 38px rgba(73,89,224,.36);
+}
+
+.send-btn:hover:before{
+    left:140%;
+}
+
+.send-btn span{
+    position:relative;
+    z-index:2;
+}
+
+.clear-btn{
+    min-height:52px;
+    padding:0 18px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    background:rgba(255,255,255,.035);
+    color:#858e9d;
+    font-family:'Cairo',sans-serif;
+    font-size:11px;
+    cursor:pointer;
+    transition:.3s ease;
+}
+
+.clear-btn:hover{
+    color:#dce1ea;
+    background:rgba(255,255,255,.06);
+    border-color:rgba(255,255,255,.13);
+}
+
+.notice{
+    margin-top:14px;
+    padding:14px 16px;
+    border-radius:14px;
+    background:rgba(255,255,255,.025);
+    border:1px solid rgba(255,255,255,.055);
+    color:#687181;
+    font-size:10px;
+    line-height:1.8;
+    text-align:center;
+}
+
+.footer{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    color:#505866;
+    font-size:10px;
+    padding:0 0 30px;
+}
+
+@media(max-width:760px){
+    .back{
+        top:13px;
+        right:13px;
+        padding:9px 13px;
+        font-size:11px;
+    }
+
+    .wrapper{
+        padding:72px 0 42px;
+    }
+
+    .logo{
+        width:145px;
+        margin-bottom:23px;
+    }
+
+    .header{
+        margin-bottom:29px;
+    }
+
+    h1{
+        letter-spacing:-1px;
+    }
+
+    .header-text{
+        font-size:12px;
+        line-height:2;
+        padding:0 5px;
+    }
+
+    .support-layout{
+        grid-template-columns:1fr;
+    }
+
+    .info-card{
+        order:2;
+        padding:23px 20px;
+        border-radius:22px;
+    }
+
+    .form-card{
+        order:1;
+        padding:21px 17px;
+        border-radius:22px;
+    }
+
+    textarea{
+        min-height:250px;
+        font-size:12px;
+        padding:16px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .send-btn,
+    .clear-btn{
+        width:100%;
+    }
+
+    .send-btn{
+        min-height:51px;
+    }
+
+    .clear-btn{
+        min-height:45px;
+    }
+}
+
+@media(max-width:400px){
+    .wrapper{
+        width:94%;
+    }
+
+    h1{
+        font-size:31px;
+    }
+
+    .support-layout{
+        gap:13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<a class="back" href="../main/main.html">
+    <span>←</span>
+    رجوع
+</a>
+
+<main class="wrapper">
+
+    <header class="header">
+
+        <img class="logo" src="../img/logo.png" alt="الشعار">
+
+        <div class="badge">مركز الدعم الفني والمساعدة</div>
+
+        <h1>كيف يمكننا مساعدتك؟</h1>
+
+        <p class="header-text">
+            نحن هنا لمساعدتك والإجابة عن استفساراتك.
+            اكتب رسالتك بالتفصيل وبكل راحة، وسنقوم بتحويلك مباشرة إلى الدعم الفني
+            لمتابعة طلبك ومساعدتك في الوصول إلى الحل المناسب.
+        </p>
+
+    </header>
+
+    <section class="support-layout">
+
+        <aside class="info-card">
+
+            <div class="card-inner">
+
+                <h2 class="info-title">الدعم الفني والمساعدة</h2>
+
+                <p class="info-description">
+                    مركز المساعدة هو المكان المخصص لاستقبال استفساراتكم ومشاكلكم وملاحظاتكم.
+                    لا تتردد في شرح المشكلة بالتفصيل حتى نتمكن من مساعدتك بشكل أفضل.
+                </p>
+
+                <div class="info-items">
+
+                    <div class="info-item">
+                        <strong>المساعدة والدعم</strong>
+                        <span>لأي مشكلة تواجهك أثناء استخدام المنصة.</span>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>الاستفسارات</strong>
+                        <span>يمكنك إرسال أي سؤال أو استفسار ترغب في معرفة إجابته.</span>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>الإبلاغ عن مشكلة</strong>
+                        <span>أخبرنا عن أي خطأ أو مشكلة واجهتك وسنحاول مساعدتك.</span>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>اقتراحاتكم</strong>
+                        <span>اقتراحاتكم تساعدنا على تحسين وتطوير الخدمة باستمرار.</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <section class="form-card">
+
+            <div class="card-inner">
+
+                <h2 class="form-title">أرسل رسالتك إلى الدعم الفني</h2>
+
+                <p class="form-description">
+                    اكتب كل ما تريد توضيحه في الرسالة. يمكنك شرح المشكلة بالتفصيل وإضافة أي معلومات تراها مهمة.
+                </p>
+
+                <div class="message-label">
+                    <label for="message">رسالتك</label>
+                    <span class="counter" id="counter">0 حرف</span>
+                </div>
+
+                <textarea
+                    id="message"
+                    placeholder="اكتب رسالتك هنا بكل راحة...&#10;&#10;اشرح المشكلة أو الاستفسار بالتفصيل، وسنكون سعداء بمساعدتك."
+                    spellcheck="false"
+                ></textarea>
+
+                <div class="actions">
+
+                    <button class="send-btn" id="sendButton">
+                        <span>إرسال الرسالة</span>
+                    </button>
+
+                    <button class="clear-btn" id="clearButton">
+                        مسح الرسالة
+                    </button>
+
+                </div>
+
+                <div class="notice">
+                    عند الضغط على إرسال الرسالة سيتم فتح واتساب مباشرة مع تجهيز رسالتك للدعم الفني.
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+    مركز الدعم الفني والمساعدة
+</footer>
+
+<script>
+const message = document.getElementById('message');
+const counter = document.getElementById('counter');
+const sendButton = document.getElementById('sendButton');
+const clearButton = document.getElementById('clearButton');
+
+message.addEventListener('input',function(){
+    const length=this.value.length;
+    counter.textContent=length.toLocaleString('ar-EG')+' حرف';
+});
+
+clearButton.addEventListener('click',function(){
+    message.value='';
+    message.focus();
+    counter.textContent='0 حرف';
+});
+
+sendButton.addEventListener('click',function(){
+    const text=message.value.trim();
+
+    if(!text){
+        message.focus();
+        message.style.borderColor='rgba(255,95,95,.55)';
+        message.style.boxShadow='0 0 0 4px rgba(255,70,70,.06)';
+
+        setTimeout(function(){
+            message.style.borderColor='';
+            message.style.boxShadow='';
+        },1200);
+
+        return;
+    }
+
+    const phone='201274277202';
+
+    const supportMessage=
+`مرحبًا، أحتاج إلى مساعدة من الدعم الفني.
+
+رسالة المستخدم:
+${text}
+
+شكرًا لكم.`;
+
+    const whatsappUrl='https://wa.me/'+phone+'?text='+encodeURIComponent(supportMessage);
+
+    window.location.href=whatsappUrl;
+});
+</script>
+
+</body>
+</html>
+
