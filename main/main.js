@@ -1,5 +1,5 @@
 const CONFIG = {
-  API_URL: "https://script.google.com/macros/s/AKfycbzA0rEosIhYcxog3t81iHIvPJ1v0nb9PFDqklnPO1ROK4J8h6LLtiePK9sQN5KD2qMk/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbxaNnCCwXvv5qCt-go5hTBh7lUrkeuEOmnQsbtYgmNo1tBwKFDMEiDjf8YNnCCj_IWV/exec",
   SESSION_KEY: "asn3_session"
 };
 
