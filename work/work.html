@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أصنــعها | مشاريعي</title>
+<link rel="icon" type="image/png" href="../img/fav.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="work.css">
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div id="sessionLoader" class="session-loader">
+  <div class="loader-ring"></div>
+  <p>جاري التحقق من الجلسة...</p>
+</div>
+
+<div id="storageGate" class="storage-gate hidden">
+  <div class="storage-gate-card">
+    <i class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg></i>
+    <h2>التخزين مش شغال</h2>
+    <p>لازم تفعّل التخزين المحلي من الصفحة الرئيسية قبل ما تقدر تشتغل على مشاريعك</p>
+    <a href="../main/main.html" class="btn-primary">الرجوع للرئيسية</a>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+
+  <header class="topbar">
+    <a href="../main/main.html" class="icon-btn back-btn" title="الرجوع للرئيسية">
+      <i><svg viewBox="0 0 24 24"><path d="M10 19l-7-7 7-7m-7 7h18"/></svg></i>
+    </a>
+
+    <div class="brand-block">
+      <img src="../img/logo.png" alt="أصنعها" class="brand-logo">
+      <span class="brand-name">مشاريعي</span>
+    </div>
+
+    <div class="user-chip" id="userChip">
+      <span class="avatar-ring" id="avatarRing">
+        <img id="userAvatar" src="../img/pro1.png" alt="">
+      </span>
+      <div class="user-meta">
+        <span class="user-name-row">
+          <span id="userName" class="user-name">--</span>
+          <img id="ownBadge" class="own-badge-inline hidden" src="../img/abro.png" alt="">
+        </span>
+        <span id="userBadge" class="user-badge hidden"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <div class="projects-head">
+      <h1>مشاريعك</h1>
+      <div class="head-actions">
+        <button class="btn-secondary" id="importProjectBtn">
+          <i><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></i>
+          تحميل مشروع
+        </button>
+        <button class="btn-primary" id="newProjectBtn">
+          <i><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></i>
+          مشروع جديد
+        </button>
+      </div>
+    </div>
+
+    <div id="projectsGrid" class="projects-grid"></div>
+    <p id="projectsEmpty" class="projects-empty hidden">لسه معندكش أي مشاريع، ابدأ بإنشاء أو تحميل أول مشروع</p>
+
+  </main>
+
+</div>
+
+<div id="newProjectModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="closeNewProjectModal">
+      <i><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></i>
+    </button>
+    <h2>مشروع جديد</h2>
+
+    <div class="field">
+      <label>اسم المشروع</label>
+      <input type="text" id="projectNameInput" maxlength="60" placeholder="مثال: مذكرة الفصل الأول">
+    </div>
+
+    <div class="field">
+      <label>نوع المشروع</label>
+      <div class="type-grid" id="typeGrid">
+        <button class="type-btn" data-type="exam">
+          <i><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></i>
+          امتحان
+        </button>
+        <button class="type-btn" data-type="workbook">
+          <i><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"/></svg></i>
+          ملزمة
+        </button>
+        <button class="type-btn" data-type="note">
+          <i><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6M9 13h6m-6 4h4"/></svg></i>
+          مذكرة
+        </button>
+        <button class="type-btn" data-type="book">
+          <i><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"/></svg></i>
+          كتاب
+        </button>
+        <button class="type-btn" data-type="other">
+          <i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></i>
+          أخرى
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-primary full-btn" id="confirmNewProjectBtn" disabled>إنشاء المشروع</button>
+    <p id="newProjectMessage" class="form-message"></p>
+  </div>
+</div>
+
+<div id="importProjectModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="closeImportModal">
+      <i><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></i>
+    </button>
+    <h2>تحميل مشروع من جهازك</h2>
+    <p class="modal-subtext">اختر مجلد المشروع المحفوظ على جهازك أو ملف project.json مباشرة.</p>
+
+    <div class="import-options-grid">
+      <button class="import-opt-card" id="importByFolderBtn">
+        <i><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></i>
+        <span class="opt-title">اختيار مجلد المشروع</span>
+        <span class="opt-desc">تحميل مجلد كامل تم تصميمه وحفظه سابقاً</span>
+      </button>
+
+      <label class="import-opt-card" id="importByFileLabel">
+        <input type="file" id="importFileInput" accept=".json" hidden>
+        <i><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></i>
+        <span class="opt-title">اختيار ملف project.json</span>
+        <span class="opt-desc">استيراد ملف البيانات مباشرة</span>
+      </label>
+    </div>
+
+    <p id="importMessage" class="form-message"></p>
+  </div>
+</div>
+
+<div id="creatingOverlay" class="creating-overlay hidden">
+  <div class="loader-ring"></div>
+  <p id="overlayStatusText">جاري معالجة المشروع...</p>
+</div>
+
+<script src="work.js"></script>
+</body>
+</html>
