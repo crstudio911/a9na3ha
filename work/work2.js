@@ -221,51 +221,145 @@ function performRedo(){
   updateHistoryBtns();
 }
 let currentZoom = 1;
-const ZOOM_MIN = 0.2;
-const ZOOM_MAX = 2.0;
+const ZOOM_MIN = 0.35;
+const ZOOM_MAX = 3.0;
 
-function applyZoom(z){
+function zoomStorageKey(){
+  const id = (projectData && projectData.meta && projectData.meta.id) || localStorage.getItem("asn3_open_project_id") || "default";
+  return "asn3_zoom_" + id;
+}
+
+function saveZoomLocal(){
+  try{ localStorage.setItem(zoomStorageKey(), String(currentZoom)); }catch(e){}
+}
+
+function loadZoomLocal(){
+  try{
+    const v = parseFloat(localStorage.getItem(zoomStorageKey()));
+    if(!isNaN(v) && v >= ZOOM_MIN && v <= ZOOM_MAX) return v;
+  }catch(e){}
+  return null;
+}
+
+// يجعل مساحة السكرول بقد الصفحات فعلياً بعد التكبير/التصغير
+function syncStageSize(){
+  const scaler = document.getElementById("canvasScaler");
+  const wrap = document.getElementById("stageCenteringWrap");
+  if(!scaler || !wrap) return;
+  const w = scaler.offsetWidth;
+  const h = scaler.offsetHeight;
+  if(!w || !h) return;
+  wrap.style.width = (w * currentZoom) + "px";
+  wrap.style.height = (h * currentZoom) + "px";
+}
+
+function applyZoom(z, opts){
+  const prevZoom = currentZoom;
   currentZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z));
+  if(currentZoom === prevZoom && !(opts && opts.force)) return;
+
   document.getElementById("canvasScaler").style.transform = "scale(" + currentZoom + ")";
   const pct = Math.round(currentZoom * 100);
   document.getElementById("zoomLabel").textContent = pct + "%";
   document.getElementById("zoomSlider").value = pct;
+  syncStageSize();
+
+  // الحفاظ على نقطة التركيز (مؤشر الماوس أو منتصف الشاشة)
+  const stage = document.getElementById("canvasArea");
+  if(stage && prevZoom){
+    const rect = stage.getBoundingClientRect();
+    const ax = opts && opts.anchorX !== undefined ? opts.anchorX - rect.left : stage.clientWidth / 2;
+    const ay = opts && opts.anchorY !== undefined ? opts.anchorY - rect.top : stage.clientHeight / 2;
+    const ratio = currentZoom / prevZoom;
+    stage.scrollLeft = (stage.scrollLeft + ax) * ratio - ax;
+    stage.scrollTop = (stage.scrollTop + ay) * ratio - ay;
+  }
+
+  saveZoomLocal();
 }
 
-function zoomIn(){
-  applyZoom(currentZoom + 0.1);
+function zoomIn(anchor){
+  applyZoom(currentZoom * 1.1, anchor);
 }
 
-function zoomOut(){
-  applyZoom(currentZoom - 0.1);
+function zoomOut(anchor){
+  applyZoom(currentZoom / 1.1, anchor);
 }
 
 function zoomFit(){
   const stage = document.getElementById("canvasArea");
-  const availW = stage.clientWidth - 80;
-  const availH = stage.clientHeight - 80;
+  const availW = stage.clientWidth - 48;
+  const availH = stage.clientHeight - 48;
   const sheetW = projectData.sheetWidth || 794;
   const sheetH = projectData.sheetHeight || 1123;
-  const fitRatio = Math.min(availW / sheetW, availH / sheetH);
-  applyZoom(Math.max(ZOOM_MIN, Math.min(1.0, Math.round(fitRatio * 20) / 20)));
+  // ملاءمة أقرب للمستخدم: نعتمد العرض أساساً مع هامش أمان بسيط للارتفاع
+  const ratioW = availW / sheetW;
+  const ratioH = availH / (sheetH * 0.72);
+  const fitRatio = Math.min(ratioW, ratioH);
+  applyZoom(Math.max(0.6, Math.min(1.6, Math.round(fitRatio * 20) / 20)), { force: true });
 }
 
 function setupZoomControls(){
-  document.getElementById("zoomInBtn").addEventListener("click", zoomIn);
-  document.getElementById("zoomOutBtn").addEventListener("click", zoomOut);
+  document.getElementById("zoomInBtn").addEventListener("click", function(){ zoomIn(); });
+  document.getElementById("zoomOutBtn").addEventListener("click", function(){ zoomOut(); });
   document.getElementById("zoomFitBtn").addEventListener("click", zoomFit);
 
   document.getElementById("zoomSlider").addEventListener("input", function(e){
     applyZoom(Number(e.target.value) / 100);
   });
 
-  document.getElementById("canvasArea").addEventListener("wheel", function(e){
+  const scaler = document.getElementById("canvasScaler");
+  if(scaler && window.ResizeObserver){
+    new ResizeObserver(function(){ syncStageSize(); }).observe(scaler);
+  }
+  window.addEventListener("resize", syncStageSize);
+
+  const stage = document.getElementById("canvasArea");
+
+  // عجلة الماوس: Ctrl/⌘ للتكبير حول المؤشر، Shift للتمرير الأفقي، العادي تمرير رأسي
+  stage.addEventListener("wheel", function(e){
     if(e.ctrlKey || e.metaKey){
       e.preventDefault();
-      e.deltaY < 0 ? zoomIn() : zoomOut();
+      const factor = Math.exp(-e.deltaY * 0.0015);
+      applyZoom(currentZoom * factor, { anchorX: e.clientX, anchorY: e.clientY });
+      return;
+    }
+    if(e.shiftKey && e.deltaX === 0){
+      e.preventDefault();
+      stage.scrollLeft += e.deltaY;
     }
   }, { passive: false });
+
+  // تتبع الصفحة الظاهرة أثناء التمرير لتحديث مؤشر التنقل
+  let scrollRaf = null;
+  stage.addEventListener("scroll", function(){
+    if(scrollRaf) return;
+    scrollRaf = requestAnimationFrame(function(){
+      scrollRaf = null;
+      syncActivePageFromScroll();
+    });
+  }, { passive: true });
 }
+
+// يحدد الصفحة الأقرب لمنتصف منطقة العرض ويحدّث حالة التنقل
+function syncActivePageFromScroll(){
+  const stage = document.getElementById("canvasArea");
+  const wrappers = document.querySelectorAll(".sheet-wrapper");
+  if(!stage || !wrappers.length) return;
+  const stageRect = stage.getBoundingClientRect();
+  const centerY = stageRect.top + stageRect.height / 2;
+  let best = 0, bestDist = Infinity;
+  for(let i = 0; i < wrappers.length; i++){
+    const r = wrappers[i].getBoundingClientRect();
+    const dist = Math.abs((r.top + r.height / 2) - centerY);
+    if(dist < bestDist){ bestDist = dist; best = i; }
+  }
+  if((projectData.activeSheetIndex || 0) !== best){
+    projectData.activeSheetIndex = best;
+    updatePageNavStatus();
+  }
+}
+
 
 const fontFamilies = [
   "Alegreya Sans SC","Alexandria","Alkalami","Amiri Quran","Amiri","Anek Telugu","Archivo Black",
@@ -332,10 +426,26 @@ function goToPage(index){
   refreshLayersPanel();
 
   const wrappers = document.querySelectorAll(".sheet-wrapper");
-  if(wrappers[targetIndex]){
-    wrappers[targetIndex].scrollIntoView({ behavior: "smooth", block: "center" });
+  const stage = document.getElementById("canvasArea");
+  const target = wrappers[targetIndex];
+  if(!target) return;
+
+  if(stage){
+    // تمرير داخل منطقة العمل فقط (بدون تحريك الصفحة كلها)
+    const stageRect = stage.getBoundingClientRect();
+    const rect = target.getBoundingClientRect();
+    const delta = (rect.top + rect.height / 2) - (stageRect.top + stageRect.height / 2);
+    const top = Math.max(0, stage.scrollTop + delta);
+    if(typeof stage.scrollTo === "function"){
+      stage.scrollTo({ top: top, behavior: "smooth" });
+    }else{
+      stage.scrollTop = top;
+    }
+  }else{
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
+
 
 function setupPageNavCluster(){
   const prevBtn = document.getElementById("prevPageBtn");
@@ -1432,7 +1542,33 @@ function setupKeyboardShortcuts(){
       deselectElement();
       return;
     }
+
+    // التنقل بين الصفحات
+    if(e.key === "PageDown" || (ctrl && e.key === "ArrowDown")){
+      e.preventDefault();
+      goToPage((projectData.activeSheetIndex || 0) + 1);
+      return;
+    }
+
+    if(e.key === "PageUp" || (ctrl && e.key === "ArrowUp")){
+      e.preventDefault();
+      goToPage((projectData.activeSheetIndex || 0) - 1);
+      return;
+    }
+
+    if(e.key === "Home" && ctrl){
+      e.preventDefault();
+      goToPage(0);
+      return;
+    }
+
+    if(e.key === "End" && ctrl){
+      e.preventDefault();
+      goToPage(projectData.sheets.length - 1);
+      return;
+    }
   }, true);
+
 
   document.addEventListener("click", function(e){
     if(!e.target.closest(".el") && !e.target.closest(".floating-context-bar") && !e.target.closest(".canva-sidebar-panel") && !e.target.closest(".font-modal-box") && !e.target.closest(".modal-box")){
@@ -1476,5 +1612,11 @@ document.addEventListener("DOMContentLoaded", async function(){
   loadTemplates();
   updateHistoryBtns();
 
-  setTimeout(zoomFit, 150);
+  setTimeout(function(){
+    const saved = loadZoomLocal();
+    if(saved){ applyZoom(saved, { force: true }); }
+    else { zoomFit(); }
+    syncActivePageFromScroll();
+  }, 150);
+
 });
